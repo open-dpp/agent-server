@@ -1,2 +1,2 @@
-# agent-server
-The AI agent server
+# mcp-server
+MCP Server providing tools and resources for AI

@@ -1,45 +1,26 @@
 // agent-server/src/chat.service.ts
-import { Injectable, OnModuleInit } from '@nestjs/common';
-
-import { ChatOpenAI } from '@langchain/openai';
-import { createReactAgent } from '@langchain/langgraph/prebuilt';
-import { MultiServerMCPClient } from '@langchain/mcp-adapters';
+import { Injectable } from '@nestjs/common';
 import { ChatPromptTemplate } from '@langchain/core/prompts';
 import { StringOutputParser } from '@langchain/core/output_parsers';
 import { RunnableSequence } from '@langchain/core/runnables';
+import { AiService } from './ai/ai.service';
+import { McpClientService } from './mcp-client/mcp-client.service';
+
 @Injectable()
-export class ChatService implements OnModuleInit {
-  private agent: any;
-
-  async onModuleInit() {
-    const client = new MultiServerMCPClient({
-      throwOnLoadError: true,
-      prefixToolNameWithServerName: false,
-      additionalToolNamePrefix: '',
-      mcpServers: {
-        productPassport: {
-          transport: 'sse',
-          url: 'http://localhost:5000/sse',
-          reconnect: {
-            enabled: true,
-            maxAttempts: 5,
-            delayMs: 2000,
-          },
-        },
-      },
-    });
-    const tools = await client.getTools();
-    console.log(tools);
-
-    const llm = new ChatOpenAI({
-      modelName: 'gpt-4o-mini',
-      temperature: 0,
-    });
-
-    this.agent = createReactAgent({ llm, tools });
-  }
+export class ChatService {
+  constructor(
+    private mcpClientService: McpClientService,
+    private aiService: AiService,
+  ) {}
 
   async askAgent(query: string) {
+    const llm = this.aiService.getLLM();
+    const tools = await this.mcpClientService.getTools();
+    const agent = this.aiService.getAgent({
+      llm,
+      tools,
+    });
+
     const prompt = ChatPromptTemplate.fromMessages([
       ['system', 'You are a helpful assistant'],
       ['human', '{input}'],
@@ -47,7 +28,7 @@ export class ChatService implements OnModuleInit {
 
     const chain = RunnableSequence.from([
       prompt,
-      this.agent,
+      agent,
       (agentResponse: { messages: any[] }) => {
         const messages = agentResponse.messages || [];
 

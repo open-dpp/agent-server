@@ -17,7 +17,6 @@ export class ChatGateway {
 
   @SubscribeMessage('userMessage')
   async handleMessage(@MessageBody() message: string) {
-    console.log(message);
     const reply = await this.chatService.askAgent(message);
     this.server.emit('botMessage', reply);
   }

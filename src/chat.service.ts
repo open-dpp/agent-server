@@ -31,7 +31,6 @@ export class ChatService {
       agent,
       (agentResponse: { messages: any[] }) => {
         const messages = agentResponse.messages || [];
-
         const lastMessage = messages[messages.length - 1];
 
         return lastMessage?.content || '';

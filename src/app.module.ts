@@ -15,6 +15,7 @@ import { AiModule } from './ai/ai.module';
         z
           .object({
             OPENAI_API_KEY: z.string(),
+            MISTRAL_API_KEY: z.string(),
             MCP_URL: z.string(),
             PORT: z.number().default(5001),
           })

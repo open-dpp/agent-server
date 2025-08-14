@@ -20,8 +20,11 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand"
   },
   "dependencies": {
+    "@langchain/core": "^0.3.70",
     "@langchain/langgraph": "^0.4.4",
     "@langchain/mcp-adapters": "^0.6.0",
+    "@langchain/mistralai": "^0.2.1",
+    "@langchain/ollama": "^0.2.3",
     "@langchain/openai": "^0.6.7",
     "@modelcontextprotocol/sdk": "^1.17.2",
     "@nestjs/common": "^11.1.6",

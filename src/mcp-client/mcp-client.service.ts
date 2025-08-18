@@ -27,7 +27,7 @@ export class McpClientService implements OnModuleInit, OnModuleDestroy {
       additionalToolNamePrefix: '',
       mcpServers: {
         productPassport: {
-          transport: 'sse',
+          transport: 'http',
           url: this.configService.get('MCP_URL'),
           reconnect: {
             enabled: true,

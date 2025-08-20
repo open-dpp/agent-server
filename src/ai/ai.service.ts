@@ -1,4 +1,4 @@
-import { ChatOpenAI, ChatOpenAICallOptions } from '@langchain/openai';
+import { ChatOllama } from '@langchain/ollama';
 import { Injectable } from '@nestjs/common';
 import { createReactAgent } from '@langchain/langgraph/prebuilt';
 import { StructuredToolInterface } from '@langchain/core/tools';
@@ -9,12 +9,9 @@ export class AiService {
   constructor(private readonly configService: ConfigService) {}
 
   getLLM() {
-    return new ChatOpenAI({
-      model: 'gpt-4o-mini',
-      configuration: {
-        // baseURL: this.configService.get('OPENAI_API_URL'),
-        apiKey: this.configService.get('OPENAI_API_KEY'),
-      },
+    return new ChatOllama({
+      model: 'qwen3:0.6b',
+      baseUrl: 'http://91.99.52.50:11434',
     });
   }
 
@@ -22,7 +19,7 @@ export class AiService {
     llm,
     tools,
   }: {
-    llm: ChatOpenAI<ChatOpenAICallOptions>;
+    llm: ChatOllama;
     tools: StructuredToolInterface[];
   }) {
     return createReactAgent({

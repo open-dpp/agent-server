@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ChatOllama } from '@langchain/ollama';
 import { createReactAgent } from '@langchain/langgraph/prebuilt';
 import { StructuredToolInterface } from '@langchain/core/tools';
 import { ConfigService } from '@nestjs/config';
@@ -9,23 +10,16 @@ export class AiService {
   constructor(private readonly configService: ConfigService) {}
 
   getLLM() {
-    // const model = new ChatOllama({
-    //   baseUrl: 'http://localhost:11434',
-    //   model: 'tinyllama',
-    // });
-    // return model;
 
-    // return new ChatOpenAI({
-    //   model: 'gpt-4o-mini',
-    //   configuration: {
-    //     // baseURL: this.configService.get('OPENAI_API_URL'),
-    //     apiKey: this.configService.get('OPENAI_API_KEY'),
-    //   },
-    // });
     return new ChatMistralAI({
       model: 'codestral-latest',
       temperature: 0,
       apiKey: this.configService.get('MISTRAL_API_KEY'),
+    });
+
+    return new ChatOllama({
+      model: 'qwen3:0.6b',
+      baseUrl: 'http://91.99.52.50:11434',
     });
   }
 
@@ -33,7 +27,7 @@ export class AiService {
     llm,
     tools,
   }: {
-    llm: ChatMistralAI;
+    llm: ChatOllama | ChatMistralAI;
     tools: StructuredToolInterface[];
   }) {
     return createReactAgent({

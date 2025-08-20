@@ -14,7 +14,7 @@ import { AiModule } from './ai/ai.module';
       validate: (config) =>
         z
           .object({
-            OPENAI_API_KEY: z.string(),
+            OLLAMA_URL: z.string(),
             MISTRAL_API_KEY: z.string(),
             MCP_URL: z.string(),
             PORT: z.string().default('5001'),

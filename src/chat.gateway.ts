@@ -7,20 +7,30 @@ import {
 } from '@nestjs/websockets';
 import { Server } from 'socket.io';
 import { ChatService } from './chat.service';
+import { Logger } from '@nestjs/common';
 
 @WebSocketGateway({ cors: true })
 export class ChatGateway {
+  private readonly logger: Logger = new Logger(ChatGateway.name);
+
   @WebSocketServer()
   server: Server;
 
   constructor(private chatService: ChatService) {}
 
   @SubscribeMessage('userMessage')
-  async handleMessage(@MessageBody() message: string) {
-    console.log('Received message:', message);
-    console.time('handleMessage');
-    const reply = await this.chatService.askAgent(message);
+  async handleMessage(
+    @MessageBody() message: { msg: string; passportUUID: string },
+  ) {
+    const startTime = Date.now();
+    this.logger.log('Start to process message:', message);
+    const reply = await this.chatService.askAgent(
+      message.msg,
+      message.passportUUID,
+    );
     this.server.emit('botMessage', reply);
-    console.timeEnd('handleMessage');
+    const endTime = Date.now();
+    const executionTime = endTime - startTime;
+    this.logger.log('Processing time:', executionTime, 'ms');
   }
 }

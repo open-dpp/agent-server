@@ -1,17 +1,31 @@
-import { ChatOllama } from '@langchain/ollama';
 import { Injectable } from '@nestjs/common';
+import { ChatOllama } from '@langchain/ollama';
 import { createReactAgent } from '@langchain/langgraph/prebuilt';
 import { StructuredToolInterface } from '@langchain/core/tools';
 import { ConfigService } from '@nestjs/config';
+import { ChatMistralAI } from '@langchain/mistralai';
+
+export enum AiModel {
+  Ollama = 'ollama',
+  Mistral = 'mistral',
+}
 
 @Injectable()
 export class AiService {
   constructor(private readonly configService: ConfigService) {}
 
-  getLLM() {
+  getLLM(aiModel: AiModel) {
+    if (aiModel === AiModel.Mistral) {
+      return new ChatMistralAI({
+        model: 'codestral-latest',
+        temperature: 0,
+        apiKey: this.configService.get('MISTRAL_API_KEY'),
+      });
+    }
+
     return new ChatOllama({
       model: 'qwen3:0.6b',
-      baseUrl: 'http://91.99.52.50:11434',
+      baseUrl: this.configService.get('OLLAMA_URL'),
     });
   }
 
@@ -19,7 +33,7 @@ export class AiService {
     llm,
     tools,
   }: {
-    llm: ChatOllama;
+    llm: ChatOllama | ChatMistralAI;
     tools: StructuredToolInterface[];
   }) {
     return createReactAgent({

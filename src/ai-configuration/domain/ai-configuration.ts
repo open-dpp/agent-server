@@ -23,14 +23,20 @@ export type AiConfigurationProps = AiConfigurationCreationProps & {
   updatedAt: Date;
 };
 
+type AiConfigurationUpdate = {
+  provider: AiProvider;
+  model: string;
+  isEnabled: boolean;
+};
+
 export class AiConfiguration {
   private constructor(
     public readonly id: string,
     public readonly ownedByOrganizationId: string,
     public readonly createdByUserId: string,
-    public readonly provider: AiProvider,
-    public readonly model: string,
-    public readonly isEnabled: boolean,
+    public provider: AiProvider,
+    public model: string,
+    public isEnabled: boolean,
     public readonly createdAt?: Date,
     public readonly updatedAt?: Date,
   ) {
@@ -66,5 +72,15 @@ export class AiConfiguration {
       data.createdAt,
       data.updatedAt,
     );
+  }
+
+  isOwnedBy(organizationId: string) {
+    return this.ownedByOrganizationId === organizationId;
+  }
+
+  update(data: AiConfigurationUpdate) {
+    this.model = data.model;
+    this.provider = data.provider;
+    this.isEnabled = data.isEnabled;
   }
 }

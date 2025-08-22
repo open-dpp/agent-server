@@ -14,6 +14,7 @@ export class AiConfigurationService {
 
   convertToDomain(aiConfigurationDoc: AiConfigurationDoc): AiConfiguration {
     return AiConfiguration.loadFromDb({
+      id: aiConfigurationDoc._id,
       ownedByOrganizationId: aiConfigurationDoc.ownedByOrganizationId,
       createdByUserId: aiConfigurationDoc.createdByUserId,
       createdAt: aiConfigurationDoc.createdAt,
@@ -21,7 +22,6 @@ export class AiConfigurationService {
       model: aiConfigurationDoc.aiModel,
       updatedAt: new Date(Date.now()),
       isEnabled: aiConfigurationDoc.isEnabled,
-      id: aiConfigurationDoc._id,
     });
   }
 
@@ -55,10 +55,20 @@ export class AiConfigurationService {
     return this.convertToDomain(aiConfigurationDocument);
   }
 
-  // async findAll() {
-  //   const passportTemplateDocuments = await this.passportTemplateDoc.find();
-  //   return passportTemplateDocuments.map((passportTemplateDocument) =>
-  //     this.convertToDomain(passportTemplateDocument),
-  //   );
-  // }
+  async findOneByOrganizationIdOrFail(id: string) {
+    const aiConfiguration = await this.findOneByOrganizationId(id);
+    if (!aiConfiguration) {
+      throw new NotFoundInDatabaseException(AiConfiguration.name);
+    }
+    return aiConfiguration;
+  }
+
+  async findOneByOrganizationId(id: string) {
+    const aiConfigurationDocument = await this.aiConfigurationDoc.findOne({
+      ownedByOrganizationId: id,
+    });
+    return aiConfigurationDocument
+      ? this.convertToDomain(aiConfigurationDocument)
+      : undefined;
+  }
 }

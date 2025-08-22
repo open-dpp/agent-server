@@ -50,4 +50,21 @@ describe('PassportTemplate', () => {
     expect(aiConfiguration.updatedAt).toBeInstanceOf(Date);
     expect(aiConfiguration.isEnabled).toEqual(props.isEnabled);
   });
+
+  it('is updated', () => {
+    const props = aiConfigurationFactory.build({
+      isEnabled: true,
+      provider: AiProvider.Ollama,
+      model: 'qwen3:0.6b',
+    });
+    const aiConfiguration = AiConfiguration.loadFromDb(props);
+    aiConfiguration.update({
+      isEnabled: false,
+      provider: AiProvider.Mistral,
+      model: 'codestral-latest',
+    });
+    expect(aiConfiguration.isEnabled).toEqual(false);
+    expect(aiConfiguration.provider).toEqual(AiProvider.Mistral);
+    expect(aiConfiguration.model).toEqual('codestral-latest');
+  });
 });

@@ -44,13 +44,13 @@ describe('AiConfigurationService', () => {
     mongoConnection = module.get<Connection>(getConnectionToken());
   });
 
-  it('fails if requested passport template could not be found', async () => {
+  it('fails if requested configuration could not be found', async () => {
     await expect(service.findOneOrFail(randomUUID())).rejects.toThrow(
       new NotFoundInDatabaseException(AiConfiguration.name),
     );
   });
 
-  it('should create passport template', async () => {
+  it('should save configuration', async () => {
     const aiConfiguration = AiConfiguration.loadFromDb(
       aiConfigurationFactory.build(),
     );
@@ -59,21 +59,16 @@ describe('AiConfigurationService', () => {
     const found = await service.findOneOrFail(id);
     expect(found).toEqual(aiConfiguration);
   });
-  //
-  // it('should find all passport templates', async () => {
-  //   const passportTemplate = PassportTemplate.loadFromDb(
-  //     passportTemplatePropsFactory.build(),
-  //   );
-  //   const passportTemplate2 = PassportTemplate.loadFromDb(
-  //     passportTemplatePropsFactory.build({ id: randomUUID() }),
-  //   );
-  //
-  //   await service.save(passportTemplate);
-  //   await service.save(passportTemplate2);
-  //   const found = await service.findAll();
-  //   expect(found).toContainEqual(passportTemplate);
-  //   expect(found).toContainEqual(passportTemplate2);
-  // });
+
+  it('should find configuration by organization id', async () => {
+    const orgaId = randomUUID();
+    const aiConfiguration = AiConfiguration.loadFromDb(
+      aiConfigurationFactory.build({ ownedByOrganizationId: orgaId }),
+    );
+    await service.save(aiConfiguration);
+    const found = await service.findOneByOrganizationId(orgaId);
+    expect(found).toEqual(aiConfiguration);
+  });
 
   afterAll(async () => {
     await mongoConnection.close();

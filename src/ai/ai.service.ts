@@ -10,17 +10,17 @@ import { AiProvider } from '../ai-configuration/domain/ai-configuration';
 export class AiService {
   constructor(private readonly configService: ConfigService) {}
 
-  getLLM(aiModel: AiProvider) {
+  getLLM(aiModel: AiProvider, model: string) {
     if (aiModel === AiProvider.Mistral) {
       return new ChatMistralAI({
-        model: 'codestral-latest',
+        model,
         temperature: 0,
         apiKey: this.configService.get('MISTRAL_API_KEY'),
       });
     }
 
     return new ChatOllama({
-      model: 'qwen3:0.6b',
+      model,
       baseUrl: this.configService.get('OLLAMA_URL'),
     });
   }

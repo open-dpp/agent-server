@@ -63,7 +63,9 @@ export class AiConfigurationService {
     return aiConfiguration;
   }
 
-  async findOneByOrganizationId(id: string) {
+  async findOneByOrganizationId(
+    id: string,
+  ): Promise<AiConfiguration | undefined> {
     const aiConfigurationDocument = await this.aiConfigurationDoc.findOne({
       ownedByOrganizationId: id,
     });

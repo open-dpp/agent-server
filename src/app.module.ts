@@ -10,6 +10,8 @@ import { PermissionsModule } from './permissions/permissions.module';
 import { AuthModule } from './auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { generateMongoConfig } from './database/config';
+import { AiConfigurationModule } from './ai-configuration/ai-configuration.module';
+import { PassportModule } from './passports/passport.module';
 
 @Module({
   imports: [
@@ -37,10 +39,12 @@ import { generateMongoConfig } from './database/config';
       }),
       inject: [ConfigService],
     }),
+    AiConfigurationModule,
     AiModule,
     McpClientModule,
     PermissionsModule,
     AuthModule,
+    PassportModule,
   ],
   providers: [ChatGateway, ChatService],
 })

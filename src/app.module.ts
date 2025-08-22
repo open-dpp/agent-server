@@ -6,6 +6,8 @@ import { ConfigModule } from '@nestjs/config';
 import { z } from 'zod';
 import { McpClientModule } from './mcp-client/mcp-client.module';
 import { AiModule } from './ai/ai.module';
+import { PermissionsModule } from './permissions/permissions.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -23,6 +25,8 @@ import { AiModule } from './ai/ai.module';
     }),
     AiModule,
     McpClientModule,
+    PermissionsModule,
+    AuthModule,
   ],
   providers: [ChatGateway, ChatService],
 })

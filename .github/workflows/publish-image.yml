@@ -37,34 +37,34 @@ jobs:
       - name: Run linter
         run: npm run lint
 
-#  test:
-#    runs-on: ubuntu-latest
-#    permissions:
-#      contents: read
-#      packages: write
-#      # Needed to provision an ephemeral certificate for cosign
-#      id-token: write
-#
-#    steps:
-#      # Step 1: Checkout code
-#      - name: Checkout code
-#        uses: actions/checkout@v4
-#
-#      # Step 2: Set up Node.js
-#      - name: Set up Node.js
-#        uses: actions/setup-node@v4
-#        with:
-#          node-version: ${{ env.NODE_VERSION }} # Use your project's Node.js version
-#
-#      # Step 3: Install dependencies
-#      - name: Install dependencies
-#        run: npm install
-#
-#      # Step 5: Run tests
-#      - name: Run tests
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      # Needed to provision an ephemeral certificate for cosign
+      id-token: write
+
+    steps:
+      # Step 1: Checkout code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }} # Use your project's Node.js version
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Step 5: Run tests
+      - name: Run tests
 #        env:
 #          DPP_API_URL=http://localhost:3000
-#        run: npm test
+        run: npm test
 
   build-publish-docker-image:
     needs:

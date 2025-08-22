@@ -3,8 +3,9 @@ import { Injectable } from '@nestjs/common';
 import { ChatPromptTemplate } from '@langchain/core/prompts';
 import { StringOutputParser } from '@langchain/core/output_parsers';
 import { RunnableSequence } from '@langchain/core/runnables';
-import { AiModel, AiService } from './ai/ai.service';
+import { AiService } from './ai/ai.service';
 import { McpClientService } from './mcp-client/mcp-client.service';
+import { AiProvider } from './ai-configuration/domain/ai-configuration';
 
 @Injectable()
 export class ChatService {
@@ -14,7 +15,7 @@ export class ChatService {
   ) {}
 
   async askAgent(query: string, passportUuid: string) {
-    const llm = this.aiService.getLLM(AiModel.Mistral);
+    const llm = this.aiService.getLLM(AiProvider.Mistral);
     const tools = await this.mcpClientService.getTools();
     const agent = this.aiService.getAgent({
       llm,

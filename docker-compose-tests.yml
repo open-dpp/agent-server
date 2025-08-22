@@ -1,8 +1,8 @@
 services:
-  market-place-db:
+  agent-server-db:
     ports:
       - '27017:27017'
-    container_name: marketplace-db
+    container_name: agent-server-db
     environment:
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=admin

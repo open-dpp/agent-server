@@ -4,18 +4,14 @@ import { createReactAgent } from '@langchain/langgraph/prebuilt';
 import { StructuredToolInterface } from '@langchain/core/tools';
 import { ConfigService } from '@nestjs/config';
 import { ChatMistralAI } from '@langchain/mistralai';
-
-export enum AiModel {
-  Ollama = 'ollama',
-  Mistral = 'mistral',
-}
+import { AiProvider } from '../ai-configuration/domain/ai-configuration';
 
 @Injectable()
 export class AiService {
   constructor(private readonly configService: ConfigService) {}
 
-  getLLM(aiModel: AiModel) {
-    if (aiModel === AiModel.Mistral) {
+  getLLM(aiModel: AiProvider) {
+    if (aiModel === AiProvider.Mistral) {
       return new ChatMistralAI({
         model: 'codestral-latest',
         temperature: 0,

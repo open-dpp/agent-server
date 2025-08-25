@@ -24,7 +24,7 @@ export class ChatService {
         passport.ownedByOrganizationId,
       );
 
-    if (aiConfiguration?.isEnabled === undefined) {
+    if (!aiConfiguration?.isEnabled) {
       throw new Error('AI is not enabled');
     }
     const llm = this.aiService.getLLM(

@@ -9,6 +9,7 @@ import { Server } from 'socket.io';
 import { ChatService } from './chat.service';
 import { Logger, UseFilters } from '@nestjs/common';
 import { SocketIoExceptionFilter } from './exceptions/websocket-exception.filter';
+import { Public } from './auth/public/public.decorator';
 
 @WebSocketGateway({ cors: true })
 @UseFilters(new SocketIoExceptionFilter())
@@ -20,6 +21,7 @@ export class ChatGateway {
 
   constructor(private chatService: ChatService) {}
 
+  @Public()
   @SubscribeMessage('userMessage')
   async handleMessage(
     @MessageBody() message: { msg: string; passportUUID: string },

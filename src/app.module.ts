@@ -12,6 +12,9 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { generateMongoConfig } from './database/config';
 import { AiConfigurationModule } from './ai-configuration/ai-configuration.module';
 import { PassportModule } from './passports/passport.module';
+import { KeycloakAuthGuard } from './auth/keycloak-auth/keycloak-auth.guard';
+import { APP_GUARD } from '@nestjs/core';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
@@ -29,6 +32,14 @@ import { PassportModule } from './passports/passport.module';
             DB_USERNAME: z.string(),
             DB_PASSWORD: z.string(),
             DB_DATABASE: z.string(),
+            KEYCLOAK_NETWORK_URL: z.string(),
+            KEYCLOAK_REALM: z.string(),
+            KEYCLOAK_CLIENT: z.string(),
+            KEYCLOAK_ADMIN_REALM: z.string(),
+            KEYCLOAK_ADMIN_CLIENT: z.string(),
+            KEYCLOAK_ADMIN_USERNAME: z.string(),
+            KEYCLOAK_ADMIN_PASSWORD: z.string(),
+            KEYCLOAK_PUBLIC_URL: z.string(),
           })
           .parse(config),
     }),
@@ -45,7 +56,16 @@ import { PassportModule } from './passports/passport.module';
     PermissionsModule,
     AuthModule,
     PassportModule,
+    HttpModule,
   ],
-  providers: [ChatGateway, ChatService],
+  providers: [
+    ChatGateway,
+    ChatService,
+    {
+      provide: APP_GUARD,
+      useClass: KeycloakAuthGuard,
+    },
+    // KeycloakPermissionsGuard is now provided by PermissionsModule
+  ],
 })
 export class AppModule {}

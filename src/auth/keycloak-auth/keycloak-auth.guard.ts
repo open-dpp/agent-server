@@ -42,11 +42,11 @@ export class KeycloakAuthGuard implements CanActivate {
     }
 
     const headerAuthorization = request.headers.authorization;
+
     const headerApiKey = request.headers['api_token'];
     let accessToken: string;
-
     if (headerAuthorization) {
-      accessToken = await this.readTokenFromJwt(headerAuthorization);
+      accessToken = this.readTokenFromJwt(headerAuthorization);
     } else if (headerApiKey) {
       accessToken = await this.readTokenFromApiKeyOrFail(headerApiKey);
     } else {
@@ -140,7 +140,7 @@ export class KeycloakAuthGuard implements CanActivate {
     throw new UnauthorizedException('API Key invalid');
   }
 
-  private async readTokenFromJwt(authorization: string): Promise<string> {
+  private readTokenFromJwt(authorization: string): string {
     const parts = authorization.split(' ');
     if (parts.length !== 2 || parts[0] !== 'Bearer') {
       throw new UnauthorizedException(

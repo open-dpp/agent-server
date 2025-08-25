@@ -31,7 +31,6 @@ describe('AiConfigurationController', () => {
   let module: TestingModule;
   let aiConfigurationService: AiConfigurationService;
   const userId = randomUUID();
-  const organizationId = randomUUID();
 
   const mockNow = new Date('2025-01-01T12:00:00Z');
 
@@ -140,6 +139,8 @@ describe('AiConfigurationController', () => {
   });
 
   it(`/GET find configuration`, async () => {
+    const organizationId = randomUUID();
+
     const aiConfiguration = AiConfiguration.loadFromDb(
       aiConfigurationFactory.build({ ownedByOrganizationId: organizationId }),
     );
@@ -159,6 +160,8 @@ describe('AiConfigurationController', () => {
   });
 
   it(`/GET find configuration fails if user is no member of organization`, async () => {
+    const organizationId = randomUUID();
+
     const aiConfiguration = AiConfiguration.loadFromDb(
       aiConfigurationFactory.build({ ownedByOrganizationId: organizationId }),
     );

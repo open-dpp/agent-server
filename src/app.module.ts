@@ -34,11 +34,6 @@ import { HttpModule } from '@nestjs/axios';
             DB_DATABASE: z.string(),
             KEYCLOAK_NETWORK_URL: z.string(),
             KEYCLOAK_REALM: z.string(),
-            KEYCLOAK_CLIENT: z.string(),
-            KEYCLOAK_ADMIN_REALM: z.string(),
-            KEYCLOAK_ADMIN_CLIENT: z.string(),
-            KEYCLOAK_ADMIN_USERNAME: z.string(),
-            KEYCLOAK_ADMIN_PASSWORD: z.string(),
             KEYCLOAK_PUBLIC_URL: z.string(),
           })
           .parse(config),

@@ -6,7 +6,7 @@ import { RunnableSequence } from '@langchain/core/runnables';
 import { AiService } from './ai/ai.service';
 import { McpClientService } from './mcp-client/mcp-client.service';
 import { AiConfigurationService } from './ai-configuration/infrastructure/ai-configuration.service';
-import { PassportService } from './passports/infrastructure/passport.service';
+import { PassportService } from './passports/passport.service';
 
 @Injectable()
 export class ChatService {

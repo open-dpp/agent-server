@@ -35,6 +35,8 @@ import { HttpModule } from '@nestjs/axios';
             KEYCLOAK_NETWORK_URL: z.string(),
             KEYCLOAK_REALM: z.string(),
             KEYCLOAK_PUBLIC_URL: z.string(),
+            DPP_API_URL: z.string(),
+            DPP_API_SERVICE_TOKEN: z.string(),
           })
           .parse(config),
     }),

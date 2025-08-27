@@ -27,11 +27,15 @@ describe('PassportService', () => {
         {
           provide: ConfigService,
           useValue: {
-            get: jest
-              .fn()
-              .mockImplementation((key) =>
-                key === 'DPP_API_URL' ? 'http://api.url' : undefined,
-              ),
+            get: jest.fn().mockImplementation((key) => {
+              if (key === 'DPP_API_URL') {
+                return 'http://api.url';
+              } else if (key === 'DPP_API_SERVICE_TOKEN') {
+                return 'service-token';
+              } else {
+                return undefined;
+              }
+            }),
           },
         },
       ],

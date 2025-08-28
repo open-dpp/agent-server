@@ -7,9 +7,12 @@ import {
 } from '@nestjs/websockets';
 import { Server } from 'socket.io';
 import { ChatService } from './chat.service';
-import { Logger } from '@nestjs/common';
+import { Logger, UseFilters } from '@nestjs/common';
+import { SocketIoExceptionFilter } from './exceptions/websocket-exception.filter';
+import { Public } from './auth/public/public.decorator';
 
 @WebSocketGateway({ cors: true })
+@UseFilters(new SocketIoExceptionFilter())
 export class ChatGateway {
   private readonly logger: Logger = new Logger(ChatGateway.name);
 
@@ -18,6 +21,7 @@ export class ChatGateway {
 
   constructor(private chatService: ChatService) {}
 
+  @Public()
   @SubscribeMessage('userMessage')
   async handleMessage(
     @MessageBody() message: { msg: string; passportUUID: string },

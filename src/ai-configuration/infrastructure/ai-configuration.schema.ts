@@ -14,19 +14,19 @@ export class AiConfigurationDoc extends Document {
   }) // Track schema version
   _schemaVersion: AiConfigurationSchemaVersion;
 
-  @Prop({ required: true })
+  @Prop({ required: true, immutable: true })
   _id: string;
-  @Prop({ required: true })
+  @Prop({ required: true, immutable: true })
   ownedByOrganizationId: string;
-  @Prop({ required: true })
+  @Prop({ required: true, immutable: true })
   createdByUserId: string;
   @Prop({ required: true })
   isEnabled: boolean;
   @Prop({ required: true, enum: AiProvider })
-  aiProvider: AiProvider;
+  provider: AiProvider;
   @Prop({ required: true })
   aiModel: string;
-  @Prop({ required: true })
+  @Prop({ required: true, immutable: true })
   createdAt: Date;
   @Prop({ required: true })
   updatedAt: Date;

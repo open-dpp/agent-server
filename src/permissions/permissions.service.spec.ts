@@ -11,7 +11,7 @@ describe('PermissionsService', () => {
   let organizationId: string;
   let module: TestingModule;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     // Mock dependencies
 
     // Create test AuthContext with user and permissions
@@ -251,7 +251,7 @@ describe('PermissionsService', () => {
       expect(result).toBe(false);
     });
   });
-  afterEach(async () => {
+  afterAll(async () => {
     await module.close();
   });
 });

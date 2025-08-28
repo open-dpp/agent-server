@@ -187,8 +187,8 @@ describe('AiConfigurationController', () => {
   });
 
   afterAll(async () => {
-    await module.close();
-    await mongoConnection.destroy();
     await app.close();
+    await mongoConnection.close();
+    await module.close();
   });
 });

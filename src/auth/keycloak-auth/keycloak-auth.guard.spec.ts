@@ -62,6 +62,7 @@ describe('KeycloakAuthGuard', () => {
         headers: {},
       };
       context = {
+        getType: () => 'http',
         switchToHttp: () => ({
           getRequest: () => mockRequest,
         }),

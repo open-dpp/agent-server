@@ -1,5 +1,5 @@
 // agent-server/src/chat.service.ts
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ChatPromptTemplate } from '@langchain/core/prompts';
 import { StringOutputParser } from '@langchain/core/output_parsers';
 import { RunnableSequence } from '@langchain/core/runnables';
@@ -10,6 +10,8 @@ import { PassportService } from './passports/passport.service';
 
 @Injectable()
 export class ChatService {
+  private readonly logger: Logger = new Logger(ChatService.name);
+
   constructor(
     private mcpClientService: McpClientService,
     private aiService: AiService,
@@ -18,20 +20,27 @@ export class ChatService {
   ) {}
 
   async askAgent(query: string, passportUuid: string) {
+    this.logger.log(`Find passport with UUID: ${passportUuid}`);
     const passport = await this.passportService.findOneOrFail(passportUuid);
+    this.logger.log(`Fetch ai configuration`);
     const aiConfiguration =
       await this.aiConfigurationService.findOneByOrganizationId(
         passport.ownedByOrganizationId,
       );
 
     if (!aiConfiguration?.isEnabled) {
+      this.logger.log(`AI is not enabled`);
       throw new Error('AI is not enabled');
     }
+    this.logger.log(`Get llm`);
+
     const llm = this.aiService.getLLM(
       aiConfiguration.provider,
       aiConfiguration.model,
     );
+    this.logger.log(`Get tools`);
     const tools = await this.mcpClientService.getTools();
+    this.logger.log(`Get agent with llm and tools`);
     const agent = this.aiService.getAgent({
       llm,
       tools,
@@ -56,6 +65,7 @@ export class ChatService {
       },
       new StringOutputParser(),
     ]);
+    this.logger.log(`Ask agent`);
 
     return await chain.invoke({ input: query });
   }

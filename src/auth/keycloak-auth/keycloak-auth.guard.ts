@@ -32,14 +32,21 @@ export class KeycloakAuthGuard implements CanActivate {
   }
 
   async canActivate(context: ExecutionContext) {
-    const request = context.switchToHttp().getRequest();
+    // 1) If this is a WebSocket context, skip (or implement WS auth here)
+    if (context.getType() === 'ws') {
+      return true;
+    }
+
+    // 2) Check for @Public() at handler level
     const isPublic = this.reflector.get<boolean>(
       IS_PUBLIC,
       context.getHandler(),
     );
     if (isPublic) {
-      return isPublic;
+      return true;
     }
+
+    const request = context.switchToHttp().getRequest();
 
     const headerAuthorization = request.headers.authorization;
 

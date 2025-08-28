@@ -4,7 +4,7 @@ import {
   aiConfigurationFactory,
 } from '../fixtures/ai-configuration-props.factory';
 
-describe('PassportTemplate', () => {
+describe('AiConfiguration', () => {
   it('is created', () => {
     const props = aiConfigurationCreationFactory.build();
 

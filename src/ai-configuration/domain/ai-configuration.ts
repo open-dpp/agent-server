@@ -37,14 +37,10 @@ export class AiConfiguration {
     public provider: AiProvider,
     public model: string,
     public isEnabled: boolean,
-    public readonly createdAt?: Date,
-    public readonly updatedAt?: Date,
+    public readonly createdAt: Date,
+    public readonly updatedAt: Date,
   ) {
-    const validModels =
-      provider === AiProvider.Ollama ? ollamaModels : mistralModels;
-    if (!validModels.includes(model)) {
-      throw new ValueError(`Invalid model ${model} for provider ${provider}`);
-    }
+    this.assertValidModelForProvider(provider, model);
   }
 
   static create(data: AiConfigurationCreationProps): AiConfiguration {
@@ -79,8 +75,16 @@ export class AiConfiguration {
   }
 
   update(data: AiConfigurationUpdate) {
+    this.assertValidModelForProvider(data.provider, data.model);
     this.model = data.model;
     this.provider = data.provider;
     this.isEnabled = data.isEnabled;
+  }
+
+  private assertValidModelForProvider(provider: AiProvider, model: string) {
+    const valid = provider === AiProvider.Ollama ? ollamaModels : mistralModels;
+    if (!valid.includes(model)) {
+      throw new ValueError(`Invalid model ${model} for provider ${provider}`);
+    }
   }
 }

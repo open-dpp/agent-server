@@ -18,7 +18,7 @@ export class AiConfigurationService {
       ownedByOrganizationId: aiConfigurationDoc.ownedByOrganizationId,
       createdByUserId: aiConfigurationDoc.createdByUserId,
       createdAt: aiConfigurationDoc.createdAt,
-      provider: aiConfigurationDoc.aiProvider,
+      provider: aiConfigurationDoc.provider,
       model: aiConfigurationDoc.aiModel,
       updatedAt: new Date(Date.now()),
       isEnabled: aiConfigurationDoc.isEnabled,
@@ -29,13 +29,17 @@ export class AiConfigurationService {
     const dataModelDoc = await this.aiConfigurationDoc.findOneAndUpdate(
       { _id: aiConfiguration.id },
       {
-        ownedByOrganizationId: aiConfiguration.ownedByOrganizationId,
-        createdByUserId: aiConfiguration.createdByUserId,
-        createdAt: aiConfiguration.createdAt,
-        aiProvider: aiConfiguration.provider,
-        aiModel: aiConfiguration.model,
-        updatedAt: new Date(Date.now()),
-        isEnabled: aiConfiguration.isEnabled,
+        $set: {
+          ownedByOrganizationId: aiConfiguration.ownedByOrganizationId,
+          createdByUserId: aiConfiguration.createdByUserId,
+          provider: aiConfiguration.provider,
+          aiModel: aiConfiguration.model,
+          updatedAt: new Date(Date.now()),
+          isEnabled: aiConfiguration.isEnabled,
+        },
+        $setOnInsert: {
+          createdAt: aiConfiguration.createdAt ?? new Date(Date.now()),
+        },
       },
       {
         new: true, // Return the updated document

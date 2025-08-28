@@ -2,6 +2,7 @@
   "name": "agent-server",
   "version": "0.0.1",
   "description": "",
+  "type": "commonjs",
   "author": "open-dpp GmbH",
   "private": true,
   "license": "GPL-3.0-only",

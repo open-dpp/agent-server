@@ -11,7 +11,7 @@ import { Logger, UseFilters } from '@nestjs/common';
 import { SocketIoExceptionFilter } from './exceptions/websocket-exception.filter';
 import { Public } from './auth/public/public.decorator';
 
-@WebSocketGateway({ cors: true })
+@WebSocketGateway({ cors: true, path: '/ai-socket' })
 @UseFilters(new SocketIoExceptionFilter())
 export class ChatGateway {
   private readonly logger: Logger = new Logger(ChatGateway.name);
